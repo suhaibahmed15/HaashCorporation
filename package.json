@@ -1,0 +1,25 @@
+{
+  "name": "haash-corporation-website",
+  "version": "1.0.0",
+  "description": "Haash Corporation — Intelligent Digital Solutions Corporate Website",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "node test_advanced.js"
+  },
+  "keywords": [
+    "haash-corporation",
+    "ai-solutions",
+    "web-development",
+    "ui-ux-design",
+    "ai-call-receptionist"
+  ],
+  "author": "Haash Corporation",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "pngjs": "^7.0.0"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/api/contact", "destination": "/api/contact" },
+    { "source": "/api/leads/export", "destination": "/api/leads?action=export" },
+    { "source": "/api/leads/status", "destination": "/api/leads?action=status" },
+    { "source": "/api/leads/delete", "destination": "/api/leads?action=delete" },
+    { "source": "/api/leads/create", "destination": "/api/leads?action=create" },
+    { "source": "/api/leads", "destination": "/api/leads" }
+  ]
+}

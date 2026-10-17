@@ -1,0 +1,726 @@
+/* ==========================================================================
+   Haash Corporation — Animation & Motion System
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Interactive Chatbot Simulator Styles & Animations
+   -------------------------------------------------------------------------- */
+.chatbot-simulator {
+  display: flex;
+  flex-direction: column;
+  height: 520px;
+  background: var(--bg-elevated);
+}
+
+.chatbot-messages-container {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--bg-secondary);
+}
+
+.chat-bubble-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  animation: fadeInBubble 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.chat-bubble-row.user {
+  flex-direction: row-reverse;
+}
+
+.chat-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.chat-avatar.user-avatar {
+  background: #333333;
+}
+
+.chat-bubble {
+  max-width: 78%;
+  padding: 12px 18px;
+  border-radius: var(--radius-lg);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  box-shadow: var(--shadow-xs);
+}
+
+.chat-bubble.bot-bubble {
+  background: var(--card-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-top-left-radius: 4px;
+}
+
+.chat-bubble.user-bubble {
+  background: var(--accent);
+  color: #FFFFFF;
+  border-top-right-radius: 4px;
+}
+
+.chat-bubble-typing {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 14px 20px;
+}
+
+.typing-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--text-muted);
+  border-radius: 50%;
+  animation: typingBounce 1.4s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+.chatbot-prompts-bar {
+  padding: 12px 20px;
+  background: var(--bg-elevated);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.prompt-chip {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.prompt-chip:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.chatbot-input-bar {
+  padding: 16px 20px;
+  background: var(--bg-elevated);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chatbot-input-bar input {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 0.875rem;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  outline: none;
+}
+
+.chatbot-input-bar input:focus {
+  border-color: var(--accent);
+}
+
+/* --------------------------------------------------------------------------
+   Website Viewport Switcher Demo
+   -------------------------------------------------------------------------- */
+.viewport-switcher-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  justify-content: center;
+}
+
+.viewport-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+  font-weight: 600;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.viewport-btn.active {
+  background: var(--accent);
+  color: #FFFFFF;
+  border-color: var(--accent);
+}
+
+.viewport-frame-wrapper {
+  background: var(--bg-secondary);
+  padding: 40px 20px;
+  border-radius: var(--radius-xl);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 480px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.preview-browser-window {
+  background: var(--bg-elevated);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1), height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.preview-browser-window.mode-desktop {
+  width: 100%;
+  max-width: 860px;
+}
+
+.preview-browser-window.mode-tablet {
+  width: 100%;
+  max-width: 540px;
+}
+
+.preview-browser-window.mode-mobile {
+  width: 100%;
+  max-width: 320px;
+}
+
+.preview-browser-bar {
+  background: var(--bg-secondary);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.preview-browser-url {
+  flex: 1;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   UI/UX Design Stage Switcher Demo
+   -------------------------------------------------------------------------- */
+.design-stage-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.design-stage-tab {
+  padding: 10px 22px;
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+  font-weight: 600;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.design-stage-tab.active {
+  background: var(--accent);
+  color: #FFFFFF;
+  border-color: var(--accent);
+  box-shadow: 0 4px 14px var(--accent-glow);
+}
+
+.design-stage-panel {
+  display: none;
+  animation: fadeInPanel 0.4s ease forwards;
+}
+
+.design-stage-panel.active {
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   AI Call Receptionist Waveform & Call Simulator
+   -------------------------------------------------------------------------- */
+.voice-simulator-container {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+}
+
+.voice-call-header {
+  background: linear-gradient(135deg, #111116 0%, #1D1D28 100%);
+  color: #FFFFFF;
+  padding: 32px 28px;
+  text-align: center;
+  position: relative;
+}
+
+.call-timer {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--accent-border);
+  margin-bottom: 12px;
+}
+
+.audio-waveform-visualizer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 54px;
+  margin: 18px 0;
+}
+
+.wave-bar {
+  width: 4px;
+  background-color: var(--accent);
+  border-radius: 4px;
+  height: 8px;
+  transition: height 0.15s ease;
+}
+
+.voice-simulator-container.is-playing .wave-bar:nth-child(odd) {
+  animation: waveHeight 0.6s infinite ease-in-out alternate;
+}
+
+.voice-simulator-container.is-playing .wave-bar:nth-child(even) {
+  animation: waveHeight 0.9s infinite ease-in-out alternate;
+}
+
+.voice-simulator-container.is-playing .wave-bar:nth-child(3n) {
+  animation: waveHeight 0.75s infinite ease-in-out alternate;
+}
+
+.voice-transcript-box {
+  padding: 28px;
+  max-height: 340px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--bg-secondary);
+}
+
+.transcript-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: fadeInBubble 0.3s ease forwards;
+}
+
+.transcript-speaker {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.transcript-speaker.ai-speaker {
+  color: var(--accent);
+}
+
+.transcript-text {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  background: var(--card-bg);
+  color: var(--text-primary);
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.voice-controls-bar {
+  padding: 20px 28px;
+  background: var(--bg-elevated);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* --------------------------------------------------------------------------
+   Keyframes
+   -------------------------------------------------------------------------- */
+@keyframes fadeInBubble {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInPanel {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes typingBounce {
+  0%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-6px); }
+}
+
+@keyframes waveHeight {
+  0% { height: 6px; }
+  100% { height: 46px; }
+}
+
+/* --------------------------------------------------------------------------
+   FAQ Accordions
+   -------------------------------------------------------------------------- */
+.faq-accordion-item {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  margin-bottom: 14px;
+  overflow: hidden;
+  transition: border-color var(--transition-fast);
+}
+
+.faq-accordion-item:hover {
+  border-color: #D0D0DA;
+}
+
+.faq-accordion-item.is-open {
+  border-color: var(--accent-border);
+}
+
+.faq-header {
+  width: 100%;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  text-align: left;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: none;
+}
+
+.faq-header svg {
+  color: var(--accent);
+  transition: transform var(--transition-normal);
+  flex-shrink: 0;
+}
+
+.faq-accordion-item.is-open .faq-header svg {
+  transform: rotate(180deg);
+}
+
+.faq-body {
+  display: none;
+  padding: 0 24px 22px;
+  font-size: 0.9375rem;
+  color: var(--text-muted);
+  line-height: 1.65;
+}
+
+.faq-accordion-item.is-open .faq-body {
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   Interactive Simulators & Accordions: Dark & Light Theme Overrides
+   -------------------------------------------------------------------------- */
+[data-theme="dark"] .chatbot-simulator {
+  background: var(--card-bg);
+}
+
+[data-theme="dark"] .chatbot-messages-container {
+  background: var(--bg-secondary);
+}
+
+[data-theme="dark"] .chat-bubble.bot-bubble {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .chatbot-prompts-bar {
+  background: var(--bg-elevated);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .prompt-chip {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .chatbot-input-bar {
+  background: var(--bg-elevated);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .chatbot-input-bar input {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .voice-simulator-container {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .voice-transcript-box {
+  background: var(--bg-secondary);
+}
+
+[data-theme="dark"] .transcript-text {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .voice-controls-bar {
+  background: var(--bg-elevated);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .faq-accordion-item {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .preview-browser-url {
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+}
+
+/* Light Theme Simulators & Accordions */
+[data-theme="light"] .chatbot-simulator {
+  background: #FFFFFF;
+}
+
+[data-theme="light"] .chatbot-messages-container {
+  background: #F8FAFC;
+}
+
+[data-theme="light"] .chat-bubble.bot-bubble {
+  background: #FFFFFF;
+  color: #090D16;
+  border-color: #E2E8F0;
+}
+
+[data-theme="light"] .prompt-chip {
+  background: #FFFFFF;
+  border-color: #CBD5E1;
+  color: #1E293B;
+}
+
+[data-theme="light"] .prompt-chip:hover {
+  background: #EEF2FF;
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+[data-theme="light"] .chatbot-input-bar {
+  background: #FFFFFF;
+  border-color: #E2E8F0;
+}
+
+[data-theme="light"] .chatbot-input-bar input {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+  color: #090D16;
+}
+
+[data-theme="light"] .voice-simulator-container {
+  background: #FFFFFF;
+  border-color: #E2E8F0;
+}
+
+[data-theme="light"] .voice-transcript-box {
+  background: #F8FAFC;
+}
+
+[data-theme="light"] .transcript-text {
+  background: #FFFFFF;
+  color: #090D16;
+  border-color: #E2E8F0;
+}
+
+[data-theme="light"] .voice-controls-bar {
+  background: #FFFFFF;
+  border-color: #E2E8F0;
+}
+
+[data-theme="light"] .faq-accordion-item {
+  background: #FFFFFF;
+  border-color: #E2E8F0;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+[data-theme="light"] .faq-header {
+  color: #090D16;
+}
+
+[data-theme="light"] .faq-body {
+  color: #475569;
+}
+
+/* --------------------------------------------------------------------------
+   Scroll Reading Progress Bar
+   -------------------------------------------------------------------------- */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: var(--accent-gradient);
+  z-index: 9999;
+  transition: width 0.05s ease-out;
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+/* --------------------------------------------------------------------------
+   Floating Ambient Aurora Glow Mesh
+   -------------------------------------------------------------------------- */
+.aurora-mesh {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.aurora-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(95px);
+  pointer-events: none;
+  opacity: 0.12;
+}
+
+[data-theme="light"] .aurora-orb {
+  opacity: 0.05;
+  filter: blur(105px);
+}
+
+.aurora-orb-1 {
+  top: -15%;
+  left: 10%;
+  width: 580px;
+  height: 580px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
+  animation: auroraFloat1 18s ease-in-out infinite alternate;
+}
+
+.aurora-orb-2 {
+  top: 30%;
+  right: -10%;
+  width: 650px;
+  height: 650px;
+  background: radial-gradient(circle, rgba(0, 242, 254, 0.08) 0%, transparent 70%);
+  animation: auroraFloat2 22s ease-in-out infinite alternate;
+}
+
+.aurora-orb-3 {
+  bottom: -15%;
+  left: 25%;
+  width: 550px;
+  height: 550px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.08) 0%, transparent 70%);
+  animation: auroraFloat3 20s ease-in-out infinite alternate;
+}
+
+/* Subtle Ambient Cyber Sheen */
+.cosmic-nebula-vortex {
+  position: absolute;
+  top: -140px;
+  right: -80px;
+  width: 650px;
+  height: 650px;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08) 0%, rgba(0, 242, 254, 0.06) 35%, rgba(168, 85, 247, 0.04) 55%, transparent 75%);
+  border-radius: 50%;
+  filter: blur(65px);
+  pointer-events: none;
+  z-index: 0;
+  animation: cosmicVortexSpin 35s linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes cosmicVortexSpin {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.08); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes auroraFloat1 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(50px, 70px) scale(1.12); }
+  100% { transform: translate(-35px, 40px) scale(0.95); }
+}
+
+@keyframes auroraFloat2 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-65px, -50px) scale(1.15); }
+  100% { transform: translate(30px, -70px) scale(0.92); }
+}
+
+@keyframes auroraFloat3 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-40px, -60px) scale(1.1); }
+  100% { transform: translate(55px, -30px) scale(0.96); }
+}
+
+/* --------------------------------------------------------------------------
+   Accessibility: Reduced Motion Preference
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
