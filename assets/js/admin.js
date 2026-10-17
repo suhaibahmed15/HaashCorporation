@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } catch (err) {
       console.warn('[Leads Fetch Error]', err);
-      showToast('Could not sync with local server. Ensure server.js is running.');
+      showToast('Could not sync with local server. Ensure local server is running.');
       // Attempt fallback to local inquiries.json if on file://
     } finally {
       if (refreshBtn) {

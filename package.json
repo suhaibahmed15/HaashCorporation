@@ -2,10 +2,9 @@
   "name": "haash-corporation-website",
   "version": "1.0.0",
   "description": "Haash Corporation — Intelligent Digital Solutions Corporate Website",
-  "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js",
+    "start": "node dev-server.js",
+    "dev": "node dev-server.js",
     "test": "node test_advanced.js"
   },
   "keywords": [
