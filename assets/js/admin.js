@@ -184,23 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // 2. Otherwise try local/serverless API
-      try {
-        const res = await fetch(`${API_BASE}/api/leads`);
-        if (res.ok) {
-          const data = await res.json();
-          if (data.success && Array.isArray(data.leads)) {
-            allLeads = data.leads;
-            updateStats();
-            renderLeads();
-            return;
-          }
-        }
-      } catch (e) {
-        // Fallback to client storage
-      }
-
-      // 3. Fallback to client local cache / offline leads
+      // 2. Fallback to client local cache / offline leads
       if (window.HaashSupabase) {
         const offlineLeads = await window.HaashSupabase.fetchLeads();
         allLeads = offlineLeads || [];
@@ -458,15 +442,6 @@ document.addEventListener('DOMContentLoaded', () => {
         await window.HaashSupabase.updateStatus(id, status);
       }
 
-      try {
-        await fetch(`${API_BASE}/api/leads/status`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id, status })
-        });
-      } catch (e) {
-        // Ignore server error if on static host
-      }
 
       showToast(`Lead marked as ${status}`);
       const lead = allLeads.find(l => String(l.id) === String(id));
@@ -486,15 +461,6 @@ document.addEventListener('DOMContentLoaded', () => {
         await window.HaashSupabase.deleteLead(id);
       }
 
-      try {
-        await fetch(`${API_BASE}/api/leads/delete`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id })
-        });
-      } catch (e) {
-        // Ignore server error if on static host
-      }
 
       showToast('Lead deleted successfully');
       allLeads = allLeads.filter(l => String(l.id) !== String(id));
@@ -584,19 +550,6 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
 
-        try {
-          const res = await fetch(`${API_BASE}/api/leads/create`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-          if (res.ok) {
-            const data = await res.json();
-            if (data.success && data.lead) createdLead = data.lead;
-          }
-        } catch (e) {
-          // Ignore server error on static hosts
-        }
 
         if (createdLead) {
           showToast('Manual lead created successfully!');

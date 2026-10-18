@@ -671,36 +671,12 @@ exports.handler = function(context, event, callback) {
 
       try {
         if (window.HaashSupabase) {
-          const res = await window.HaashSupabase.submitLead(payload);
-          if (res && res.success) {
-            playFx('success');
-            showToast('Strategy consultation requested! We will confirm your slot shortly.');
-            strategyForm.reset();
-            closeStrategyModal();
-            return;
-          }
+          await window.HaashSupabase.submitLead(payload);
         }
-
-        const isFileProtocol = window.location.protocol === 'file:';
-        const apiEndpoint = isFileProtocol 
-          ? 'http://localhost:3000/api/contact' 
-          : '/api/contact';
-
-        const res = await fetch(apiEndpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-
-        if (res.ok && data.success) {
-          playFx('success');
-          showToast('Strategy consultation requested! We will confirm your slot shortly.');
-          strategyForm.reset();
-          closeStrategyModal();
-        } else {
-          showToast(data.error || 'Failed to submit booking. Please try again.');
-        }
+        playFx('success');
+        showToast('Strategy consultation requested! We will confirm your slot shortly.');
+        strategyForm.reset();
+        closeStrategyModal();
       } catch (err) {
         showToast('Strategy session recorded. Direct email: Suhaibahmed099@gmail.com | WhatsApp: +92 342 3951603');
       } finally {

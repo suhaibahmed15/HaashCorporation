@@ -93,42 +93,11 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       let result = null;
 
-      // 1. Try Supabase Cloud first if configured
-      if (window.HaashSupabase && window.HaashSupabase.isConfigured()) {
+      // Submit directly to Supabase Cloud Client
+      if (window.HaashSupabase) {
         result = await window.HaashSupabase.submitLead(data);
       } else {
-        // 2. Attempt local/serverless API
-        try {
-          const isFileProtocol = window.location.protocol === 'file:';
-          const apiEndpoint = isFileProtocol 
-            ? 'http://localhost:3000/api/contact' 
-            : '/api/contact';
-
-          const response = await fetch(apiEndpoint, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            },
-            body: JSON.stringify(data)
-          });
-          if (response.ok) {
-            result = await response.json();
-          }
-        } catch (apiErr) {
-          // If server is offline (e.g. static host without node), save via Supabase client fallback
-          if (window.HaashSupabase) {
-            result = await window.HaashSupabase.submitLead(data);
-          }
-        }
-      }
-
-      if (!result) {
-        if (window.HaashSupabase) {
-          result = await window.HaashSupabase.submitLead(data);
-        } else {
-          result = { success: true, message: 'Thank you! Your message has been received. Our team will get back to you shortly.' };
-        }
+        result = { success: true, message: 'Thank you! Your message has been received. Our team will get back to you shortly.' };
       }
 
       if (result && result.success) {
