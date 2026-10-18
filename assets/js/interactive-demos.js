@@ -228,8 +228,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const filter = btn.getAttribute('data-filter');
         projectCards.forEach(card => {
-          const category = card.getAttribute('data-category');
-          if (filter === 'all' || category === filter) {
+          const category = card.getAttribute('data-category') || '';
+          const categories = category.split(/\s+/);
+          if (filter === 'all' || categories.includes(filter)) {
             card.style.display = 'block';
           } else {
             card.style.display = 'none';

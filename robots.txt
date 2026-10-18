@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://haashcorp.com/sitemap.xml
+Sitemap: https://haashcorporation.vercel.app/sitemap.xml

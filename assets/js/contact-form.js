@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (errorMessageEl) {
           const isFileProtocol = window.location.protocol === 'file:';
           if (isFileProtocol) {
-            errorMessageEl.innerHTML = 'Network error: Server was unreachable from file://. Please view via <strong><a href="http://localhost:3000/contact.html" style="text-decoration:underline;color:inherit;">http://localhost:3000/contact.html</a></strong> or reach us via <a href="https://wa.me/923423951603" target="_blank" style="text-decoration:underline;color:inherit;">WhatsApp (+92 342 3951603)</a> / <a href="mailto:Suhaibahmed099@gmail.com" style="text-decoration:underline;color:inherit;">Suhaibahmed099@gmail.com</a>.';
+            errorMessageEl.innerHTML = 'Network error: Server was unreachable from file://. Please view via <strong><a href="http://localhost:3000/contact.html" style="text-decoration:underline;color:inherit;">http://localhost:3000/contact.html</a></strong> or reach us via <a href="https://wa.me/923423951603" target="_blank" style="text-decoration:underline;color:inherit;">WhatsApp (+92 342 3951603)</a> / <a href="mailto:hasshcorporation@gmail.com" style="text-decoration:underline;color:inherit;">hasshcorporation@gmail.com</a>.';
           } else {
             errorMessageEl.textContent = 'A network error occurred while submitting. Please check your connection or contact us via WhatsApp (+92 342 3951603).';
           }

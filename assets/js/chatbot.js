@@ -37,7 +37,7 @@
     },
     {
       keywords: ['whatsapp', 'contact', 'call', 'email', 'phone', 'reach', 'number', 'address', 'location'],
-      response: "You can connect with us directly on **WhatsApp at +92 342 3951603** or via email at **Suhaibahmed099@gmail.com**. Our headquarters are in Karachi, Pakistan, serving clients worldwide."
+      response: "You can connect with us directly on **WhatsApp at +92 342 3951603** or via email at **hasshcorporation@gmail.com**. Our headquarters are in Karachi, Pakistan, serving clients worldwide."
     },
     {
       keywords: ['hello', 'hi', 'hey', 'start', 'greetings', 'who are you'],

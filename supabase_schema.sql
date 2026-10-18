@@ -60,7 +60,7 @@ create index if not exists leads_created_at_idx on public.leads (created_at desc
 insert into public.leads (full_name, email, phone, company, service, timeline, details, source, status)
 values (
     'Suhaib Ahmed Abbasi',
-    'suhaibahmed099@gmail.com',
+    'hasshcorporation@gmail.com',
     '+923423951603',
     'Haash Corporation',
     'CRM Systems & Automation',

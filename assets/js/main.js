@@ -207,11 +207,10 @@ document.addEventListener('DOMContentLoaded', () => {
     { title: 'Our Work & Selected Demonstrations', url: 'work.html', tag: 'Portfolio', desc: 'Interactive concept prototypes and architecture case studies' },
     { title: 'Insights & Technical Notes', url: 'insights.html', tag: 'Blog', desc: 'Articles on AI automation, web speed, and voice AI' },
     { title: 'Contact & Inquiry', url: 'contact.html', tag: 'Contact', desc: 'Direct outreach, proposal requests, and WhatsApp chat' },
-    { title: 'Admin Leads Dashboard', url: 'admin.html', tag: 'Admin', desc: 'Access lead management hub and Supabase CRM' },
     { title: 'Book 15-Min Strategy Session', action: 'openStrategyModal', tag: 'Action', desc: 'Schedule a direct technical consultation' },
     { title: 'Toggle Dark / Light Theme', action: 'toggleTheme', tag: 'Shortcut', desc: 'Switch interface appearance between dark and light' },
     { title: 'Toggle Tactile Sound FX', action: 'toggleSound', tag: 'Shortcut', desc: 'Enable or disable interactive synthesizer chimes' },
-    { title: 'Copy Direct Email', action: 'copyEmail', tag: 'Action', desc: 'Copy Suhaibahmed099@gmail.com to clipboard' },
+    { title: 'Copy Direct Email', action: 'copyEmail', tag: 'Action', desc: 'Copy hasshcorporation@gmail.com to clipboard' },
     { title: 'Chat on WhatsApp', url: 'https://wa.me/923423951603', tag: 'Action', desc: 'Open direct WhatsApp conversation' }
   ];
 
@@ -287,8 +286,8 @@ document.addEventListener('DOMContentLoaded', () => {
       syncSoundButtons();
       showToast(`Sound FX ${muted ? 'Enabled 🔊' : 'Muted 🔇'}`);
     } else if (item.action === 'copyEmail') {
-      navigator.clipboard.writeText('Suhaibahmed099@gmail.com');
-      showToast('Copied Suhaibahmed099@gmail.com to clipboard');
+      navigator.clipboard.writeText('hasshcorporation@gmail.com');
+      showToast('Copied hasshcorporation@gmail.com to clipboard');
     } else if (item.url) {
       if (item.url.startsWith('http')) {
         window.open(item.url, '_blank', 'noopener,noreferrer');
@@ -678,7 +677,7 @@ exports.handler = function(context, event, callback) {
         strategyForm.reset();
         closeStrategyModal();
       } catch (err) {
-        showToast('Strategy session recorded. Direct email: Suhaibahmed099@gmail.com | WhatsApp: +92 342 3951603');
+        showToast('Strategy session recorded. Direct email: hasshcorporation@gmail.com | WhatsApp: +92 342 3951603');
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
