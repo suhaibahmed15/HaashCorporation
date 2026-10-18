@@ -263,7 +263,8 @@ img, svg, canvas, video {
 
   .whatsapp-floating-widget {
     bottom: 20px;
-    right: 20px;
+    left: 16px;
+    right: auto;
   }
 
   .whatsapp-tooltip {

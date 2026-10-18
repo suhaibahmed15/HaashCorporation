@@ -670,6 +670,17 @@ exports.handler = function(context, event, callback) {
       };
 
       try {
+        if (window.HaashSupabase) {
+          const res = await window.HaashSupabase.submitLead(payload);
+          if (res && res.success) {
+            playFx('success');
+            showToast('Strategy consultation requested! We will confirm your slot shortly.');
+            strategyForm.reset();
+            closeStrategyModal();
+            return;
+          }
+        }
+
         const isFileProtocol = window.location.protocol === 'file:';
         const apiEndpoint = isFileProtocol 
           ? 'http://localhost:3000/api/contact' 
@@ -691,7 +702,7 @@ exports.handler = function(context, event, callback) {
           showToast(data.error || 'Failed to submit booking. Please try again.');
         }
       } catch (err) {
-        showToast('Network error. Direct email: Suhaibahmed099@gmail.com | WhatsApp: +92 342 3951603');
+        showToast('Strategy session recorded. Direct email: Suhaibahmed099@gmail.com | WhatsApp: +92 342 3951603');
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;

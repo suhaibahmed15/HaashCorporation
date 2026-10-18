@@ -3031,11 +3031,12 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--accent);
 }
 
-/* WhatsApp Floating Button */
+/* WhatsApp Floating Button (Anchored to Left Side) */
 .whatsapp-floating-widget {
   position: fixed;
   bottom: 28px;
-  right: 28px;
+  left: 28px;
+  right: auto;
   z-index: 990;
   display: flex;
   align-items: center;
@@ -3073,7 +3074,7 @@ h1, h2, h3, h4, h5, h6 {
   white-space: nowrap;
   pointer-events: none;
   opacity: 0;
-  transform: translateX(6px);
+  transform: translateX(-6px);
   transition: all var(--transition-fast);
 }
 
