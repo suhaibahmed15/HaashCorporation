@@ -655,8 +655,33 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================================================
   if (exportCsvBtn) {
     exportCsvBtn.addEventListener('click', () => {
-      window.location.href = `${API_BASE}/api/leads/export`;
-      showToast('Downloading leads CSV spreadsheet...');
+      if (!allLeads || allLeads.length === 0) {
+        showToast('No leads available to export.');
+        return;
+      }
+      const headers = ['ID', 'Date', 'Full Name', 'Email', 'Phone', 'Company', 'Service', 'Timeline', 'Budget', 'Status', 'Source', 'Details'];
+      const rows = allLeads.map(l => [
+        `"${(l.id || '').replace(/"/g, '""')}"`,
+        `"${(l.submittedAt || '').replace(/"/g, '""')}"`,
+        `"${(l.fullName || '').replace(/"/g, '""')}"`,
+        `"${(l.email || '').replace(/"/g, '""')}"`,
+        `"${(l.phone || '').replace(/"/g, '""')}"`,
+        `"${(l.company || '').replace(/"/g, '""')}"`,
+        `"${(l.service || '').replace(/"/g, '""')}"`,
+        `"${(l.timeline || '').replace(/"/g, '""')}"`,
+        `"${(l.budget || '').replace(/"/g, '""')}"`,
+        `"${(l.status || 'New').replace(/"/g, '""')}"`,
+        `"${(l.source || 'Website Form').replace(/"/g, '""')}"`,
+        `"${(l.details || '').replace(/"/g, '""').replace(/\r?\n/g, ' ')}"`
+      ].join(','));
+      const csvContent = "data:text/csv;charset=utf-8," + encodeURIComponent([headers.join(','), ...rows].join('\n'));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", csvContent);
+      downloadAnchor.setAttribute("download", `haash_leads_${new Date().toISOString().slice(0, 10)}.csv`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast('Exported leads to CSV file.');
     });
   }
 

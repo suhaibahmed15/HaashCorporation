@@ -1,44 +1,26 @@
 /**
- * Haash Corporation — Local Development & Production Express Server
+ * Haash Corporation — Local Static Development Server
  */
 
-require('dotenv').config();
 const express = require('express');
 const path = require('path');
-const handleContactSubmission = require('./api/contact');
-const leadsController = require('./api/leads');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware for parsing JSON and form URL-encoded bodies
-app.use(express.json({ limit: '1mb' }));
-app.use(express.urlencoded({ extended: true, limit: '1mb' }));
-
-// CORS middleware allowing requests from file:// or other local origins
+// CORS headers
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization');
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
-  }
+  res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Accept');
+  if (req.method === 'OPTIONS') return res.sendStatus(200);
   next();
 });
 
-// API Endpoints for Contact Form & Admin Leads Dashboard
-app.post('/api/contact', handleContactSubmission);
-app.get('/api/leads', leadsController.getLeads);
-app.post('/api/leads/status', leadsController.updateLeadStatus);
-app.post('/api/leads/delete', leadsController.deleteLead);
-app.post('/api/leads/create', leadsController.createManualLead);
-app.get('/api/leads/export', leadsController.exportLeadsCsv);
-
-// Serve static assets with proper caching headers
+// Serve static assets with clean URLs
 app.use(express.static(__dirname, {
   extensions: ['html'],
-  index: 'index.html',
-  maxAge: '1h'
+  index: 'index.html'
 }));
 
 // Fallback for 404
