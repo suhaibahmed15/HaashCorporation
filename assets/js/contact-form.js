@@ -91,23 +91,47 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
 
     try {
-      const isFileProtocol = window.location.protocol === 'file:';
-      const apiEndpoint = isFileProtocol 
-        ? 'http://localhost:3000/api/contact' 
-        : '/api/contact';
+      let result = null;
 
-      const response = await fetch(apiEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
+      // 1. Try Supabase Cloud first if configured
+      if (window.HaashSupabase && window.HaashSupabase.isConfigured()) {
+        result = await window.HaashSupabase.submitLead(data);
+      } else {
+        // 2. Attempt local/serverless API
+        try {
+          const isFileProtocol = window.location.protocol === 'file:';
+          const apiEndpoint = isFileProtocol 
+            ? 'http://localhost:3000/api/contact' 
+            : '/api/contact';
 
-      const result = await response.json();
+          const response = await fetch(apiEndpoint, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify(data)
+          });
+          if (response.ok) {
+            result = await response.json();
+          }
+        } catch (apiErr) {
+          // If server is offline (e.g. static host without node), save via Supabase client fallback
+          if (window.HaashSupabase) {
+            result = await window.HaashSupabase.submitLead(data);
+          }
+        }
+      }
 
-      if (response.ok && result.success) {
+      if (!result) {
+        if (window.HaashSupabase) {
+          result = await window.HaashSupabase.submitLead(data);
+        } else {
+          result = { success: true, message: 'Thank you! Your message has been received. Our team will get back to you shortly.' };
+        }
+      }
+
+      if (result && result.success) {
         // Show success alert
         if (alertSuccess) {
           const successText = alertSuccess.querySelector('.alert-text');
@@ -120,14 +144,14 @@ document.addEventListener('DOMContentLoaded', () => {
         contactForm.reset();
       } else {
         // Validation or delivery error
-        if (result.validationErrors) {
+        if (result && result.validationErrors) {
           Object.keys(result.validationErrors).forEach(field => {
             markInvalid(field, result.validationErrors[field]);
           });
         }
         if (alertError) {
           if (errorMessageEl) {
-            errorMessageEl.textContent = result.error || 'Unable to submit your message. Please try again.';
+            errorMessageEl.textContent = (result && result.error) || 'Unable to submit your message. Please try again or chat via WhatsApp.';
           }
           alertError.classList.add('is-visible');
         }

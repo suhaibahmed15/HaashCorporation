@@ -1,0 +1,386 @@
+/**
+ * Haash Corporation — Interactive AI Chatbot Widget Styles
+ * Sleek Obsidian & Cyber Monochrome Theme matching the design system
+ */
+
+/* ==========================================================================
+   Chatbot Floating Launcher
+   ========================================================================== */
+.haash-chat-launcher {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-secondary, #08080A);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 9999px;
+  padding: 6px 16px 6px 6px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.haash-chat-launcher:hover {
+  transform: translateY(-3px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.8), 0 0 28px rgba(255, 255, 255, 0.15);
+}
+
+.chat-launcher-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FFFFFF 0%, #A1A1AA 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.chat-launcher-avatar img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  filter: invert(1);
+}
+
+.chat-status-dot {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  width: 11px;
+  height: 11px;
+  background: #10B981;
+  border: 2px solid #08080A;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #10B981;
+}
+
+.chat-launcher-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-launcher-title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.2;
+}
+
+.chat-launcher-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted, #9CA3AF);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ==========================================================================
+   Chatbot Window
+   ========================================================================== */
+.haash-chat-window {
+  position: fixed;
+  bottom: 84px;
+  right: 24px;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  height: 540px;
+  max-height: calc(100vh - 110px);
+  background: var(--bg-secondary, #08080A);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 30px rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px) scale(0.96);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.haash-chat-window.is-open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+/* Header */
+.chat-window-header {
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chat-header-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chat-header-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-header-avatar img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  filter: invert(1);
+}
+
+.chat-header-info h4 {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.chat-header-status {
+  font-size: 0.7rem;
+  color: #10B981;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.chat-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted, #9CA3AF);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  line-height: 1;
+  transition: all 0.15s ease;
+}
+
+.chat-close-btn:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Message List */
+.chat-messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  scroll-behavior: smooth;
+}
+
+.chat-bubble {
+  max-width: 82%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  word-break: break-word;
+  animation: chat-fade-in 0.2s ease-out;
+}
+
+@keyframes chat-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.chat-bubble-bot {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-primary, #FFFFFF);
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+.chat-bubble-user {
+  background: #FFFFFF;
+  color: #000000;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+  font-weight: 500;
+}
+
+.chat-timestamp {
+  font-size: 0.65rem;
+  opacity: 0.6;
+  margin-top: 4px;
+  display: block;
+  text-align: right;
+}
+
+/* Suggestion Chips */
+.chat-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 0 16px 12px;
+}
+
+.chat-chip {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-secondary, #E4E4E7);
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.chat-chip:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+/* Redirect Alert Card */
+.chat-redirect-card {
+  background: linear-gradient(135deg, rgba(91, 95, 240, 0.15), rgba(168, 85, 247, 0.15));
+  border: 1px solid rgba(91, 95, 240, 0.4);
+  border-radius: 12px;
+  padding: 12px 14px;
+  text-align: center;
+  margin-top: 6px;
+  animation: chat-fade-in 0.3s ease;
+}
+
+.chat-redirect-card p {
+  font-size: 0.8rem;
+  margin: 0 0 10px 0;
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.chat-redirect-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #FFFFFF;
+  color: #000000;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.chat-redirect-btn:hover {
+  transform: scale(1.03);
+}
+
+/* Typing Indicator */
+.chat-typing {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+  align-self: flex-start;
+  width: fit-content;
+}
+
+.typing-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--text-muted, #9CA3AF);
+  border-radius: 50%;
+  animation: typing-bounce 1.4s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing-bounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+  40% { transform: translateY(-4px); opacity: 1; }
+}
+
+/* Input Bar */
+.chat-input-bar {
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chat-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  padding: 10px 16px;
+  color: #FFFFFF;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.chat-input:focus {
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.chat-send-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: none;
+  color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+  flex-shrink: 0;
+}
+
+.chat-send-btn:hover {
+  transform: scale(1.06);
+  background: #E4E4E7;
+}
+
+.chat-send-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+  .haash-chat-window {
+    right: 12px;
+    bottom: 78px;
+    width: calc(100vw - 24px);
+    height: 480px;
+  }
+  .haash-chat-launcher {
+    bottom: 16px;
+    right: 16px;
+  }
+}

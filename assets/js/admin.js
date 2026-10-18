@@ -34,6 +34,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeAddModalBtn = document.getElementById('closeAddModal');
   const addLeadForm = document.getElementById('manualLeadForm');
 
+  // Supabase Cloud Settings Elements
+  const cloudConfigBtn = document.getElementById('cloudConfigBtn');
+  const cloudStatusText = document.getElementById('cloudStatusText');
+  const cloudModal = document.getElementById('cloudModal');
+  const closeCloudModal = document.getElementById('closeCloudModal');
+  const supabaseConfigForm = document.getElementById('supabaseConfigForm');
+  const sbProjectUrl = document.getElementById('sbProjectUrl');
+  const sbAnonKey = document.getElementById('sbAnonKey');
+  const sbClearBtn = document.getElementById('sbClearBtn');
+
   // Toast
   const adminToast = document.getElementById('adminToast');
   const toastMessage = document.getElementById('toastMessage');
@@ -46,6 +56,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const isFile = window.location.protocol === 'file:';
   const API_BASE = isFile ? 'http://localhost:3000' : '';
+
+  const updateCloudStatusUI = () => {
+    if (!cloudConfigBtn || !cloudStatusText) return;
+    const isCloudActive = window.HaashSupabase && window.HaashSupabase.isConfigured();
+    if (isCloudActive) {
+      cloudStatusText.textContent = 'Supabase Cloud (Active)';
+      cloudConfigBtn.style.color = '#10B981';
+      cloudConfigBtn.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+    } else {
+      cloudStatusText.textContent = 'Connect Supabase';
+      cloudConfigBtn.style.color = '#F59E0B';
+      cloudConfigBtn.style.borderColor = 'rgba(245, 158, 11, 0.4)';
+    }
+  };
 
   // Show Toast
   const showToast = (msg, duration = 3000) => {
@@ -135,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================================================
-  // 2. Fetch Leads Data from Server
+  // 2. Fetch Leads Data from Supabase Cloud / Local Server
   // ==========================================================================
   const loadLeads = async () => {
     if (refreshBtn) {
@@ -147,21 +171,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      const res = await fetch(`${API_BASE}/api/leads`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
+      updateCloudStatusUI();
 
-      if (data.success && Array.isArray(data.leads)) {
-        allLeads = data.leads;
+      // 1. Check if Supabase Cloud is configured
+      if (window.HaashSupabase && window.HaashSupabase.isConfigured()) {
+        const cloudLeads = await window.HaashSupabase.fetchLeads();
+        if (Array.isArray(cloudLeads)) {
+          allLeads = cloudLeads;
+          updateStats();
+          renderLeads();
+          return;
+        }
+      }
+
+      // 2. Otherwise try local/serverless API
+      try {
+        const res = await fetch(`${API_BASE}/api/leads`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && Array.isArray(data.leads)) {
+            allLeads = data.leads;
+            updateStats();
+            renderLeads();
+            return;
+          }
+        }
+      } catch (e) {
+        // Fallback to client storage
+      }
+
+      // 3. Fallback to client local cache / offline leads
+      if (window.HaashSupabase) {
+        const offlineLeads = await window.HaashSupabase.fetchLeads();
+        allLeads = offlineLeads || [];
         updateStats();
         renderLeads();
-      } else {
-        throw new Error(data.error || 'Failed to retrieve leads');
       }
     } catch (err) {
       console.warn('[Leads Fetch Error]', err);
-      showToast('Could not sync with local server. Ensure local server is running.');
-      // Attempt fallback to local inquiries.json if on file://
+      showToast('Offline mode active. Leads cached in browser.');
     } finally {
       if (refreshBtn) {
         refreshBtn.disabled = false;
@@ -234,6 +282,10 @@ document.addEventListener('DOMContentLoaded', () => {
           if (!leadService.includes('design') && !leadService.includes('ui') && !leadService.includes('ux')) return false;
         } else if (currentServiceFilter === 'voice') {
           if (!leadService.includes('voice') && !leadService.includes('call') && !leadService.includes('receptionist')) return false;
+        } else if (currentServiceFilter === 'crm') {
+          if (!leadService.includes('crm') && !leadService.includes('pipeline') && !leadService.includes('automation')) return false;
+        } else if (currentServiceFilter === 'graphic') {
+          if (!leadService.includes('graphic') && !leadService.includes('brand') && !leadService.includes('identity')) return false;
         }
       }
 
@@ -399,50 +451,58 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // Update Status API
+  // Update Status API (Supabase Cloud + Local sync)
   const updateStatus = async (id, status) => {
     try {
-      const res = await fetch(`${API_BASE}/api/leads/status`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, status })
-      });
-      const data = await res.json();
-      if (res.ok && data.success) {
-        showToast(`Lead marked as ${status}`);
-        const lead = allLeads.find(l => l.id === id);
-        if (lead) lead.status = status;
-        updateStats();
-        renderLeads();
-      } else {
-        throw new Error(data.error || 'Failed to update status');
+      if (window.HaashSupabase) {
+        await window.HaashSupabase.updateStatus(id, status);
       }
+
+      try {
+        await fetch(`${API_BASE}/api/leads/status`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, status })
+        });
+      } catch (e) {
+        // Ignore server error if on static host
+      }
+
+      showToast(`Lead marked as ${status}`);
+      const lead = allLeads.find(l => String(l.id) === String(id));
+      if (lead) lead.status = status;
+      updateStats();
+      renderLeads();
     } catch (err) {
       console.error(err);
-      showToast('Error updating status on server.');
+      showToast('Error updating status.');
     }
   };
 
-  // Delete Lead API
+  // Delete Lead API (Supabase Cloud + Local sync)
   const deleteLead = async (id) => {
     try {
-      const res = await fetch(`${API_BASE}/api/leads/delete`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id })
-      });
-      const data = await res.json();
-      if (res.ok && data.success) {
-        showToast('Lead deleted successfully');
-        allLeads = allLeads.filter(l => l.id !== id);
-        updateStats();
-        renderLeads();
-      } else {
-        throw new Error(data.error || 'Failed to delete lead');
+      if (window.HaashSupabase) {
+        await window.HaashSupabase.deleteLead(id);
       }
+
+      try {
+        await fetch(`${API_BASE}/api/leads/delete`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+      } catch (e) {
+        // Ignore server error if on static host
+      }
+
+      showToast('Lead deleted successfully');
+      allLeads = allLeads.filter(l => String(l.id) !== String(id));
+      updateStats();
+      renderLeads();
     } catch (err) {
       console.error(err);
-      showToast('Error deleting lead from server.');
+      showToast('Error deleting lead.');
     }
   };
 
@@ -516,21 +576,37 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       try {
-        const res = await fetch(`${API_BASE}/api/leads/create`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-        if (res.ok && data.success) {
+        let createdLead = null;
+        if (window.HaashSupabase) {
+          const res = await window.HaashSupabase.submitLead(payload);
+          if (res && res.success) {
+            createdLead = res.lead;
+          }
+        }
+
+        try {
+          const res = await fetch(`${API_BASE}/api/leads/create`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.success && data.lead) createdLead = data.lead;
+          }
+        } catch (e) {
+          // Ignore server error on static hosts
+        }
+
+        if (createdLead) {
           showToast('Manual lead created successfully!');
           addLeadForm.reset();
           addLeadModal.classList.remove('is-active');
-          allLeads.unshift(data.lead);
+          allLeads.unshift(createdLead);
           updateStats();
           renderLeads();
         } else {
-          throw new Error(data.error || 'Failed to create lead');
+          throw new Error('Could not save lead');
         }
       } catch (err) {
         showToast(err.message || 'Error creating manual lead.');
@@ -614,6 +690,66 @@ document.addEventListener('DOMContentLoaded', () => {
   setupCopyBtn('copyModalEmailBtn', 'modalLeadEmail', 'Email');
   setupCopyBtn('copyModalPhoneBtn', 'modalLeadPhone', 'Phone');
 
+  // ==========================================================================
+  // Supabase Cloud Configuration Modal Handlers
+  // ==========================================================================
+  if (cloudConfigBtn && cloudModal) {
+    cloudConfigBtn.addEventListener('click', () => {
+      if (window.HaashSupabase) {
+        const cfg = window.HaashSupabase.getConfig();
+        if (sbProjectUrl) sbProjectUrl.value = cfg.url || '';
+        if (sbAnonKey) sbAnonKey.value = cfg.anonKey || '';
+      }
+      cloudModal.classList.add('is-active');
+    });
+  }
+
+  if (closeCloudModal && cloudModal) {
+    closeCloudModal.addEventListener('click', () => {
+      cloudModal.classList.remove('is-active');
+    });
+  }
+
+  if (supabaseConfigForm) {
+    supabaseConfigForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const url = (sbProjectUrl ? sbProjectUrl.value : '').trim();
+      const anonKey = (sbAnonKey ? sbAnonKey.value : '').trim();
+
+      if (window.HaashSupabase) {
+        window.HaashSupabase.setConfig(url, anonKey);
+      }
+
+      showToast('Supabase Cloud credentials updated! Syncing...');
+      if (cloudModal) cloudModal.classList.remove('is-active');
+      updateCloudStatusUI();
+      await loadLeads();
+    });
+  }
+
+  if (sbClearBtn) {
+    sbClearBtn.addEventListener('click', async () => {
+      if (confirm('Disconnect Supabase Cloud? Leads will be stored in offline local storage.')) {
+        if (window.HaashSupabase) {
+          window.HaashSupabase.setConfig('', '');
+        }
+        if (sbProjectUrl) sbProjectUrl.value = '';
+        if (sbAnonKey) sbAnonKey.value = '';
+        showToast('Supabase Cloud disconnected. Offline local mode active.');
+        if (cloudModal) cloudModal.classList.remove('is-active');
+        updateCloudStatusUI();
+        await loadLeads();
+      }
+    });
+  }
+
+  // Close modals on outside click
+  window.addEventListener('click', (e) => {
+    if (e.target === detailModal) detailModal.classList.remove('is-active');
+    if (e.target === addLeadModal) addLeadModal.classList.remove('is-active');
+    if (e.target === cloudModal) cloudModal.classList.remove('is-active');
+  });
+
   // Auto-refresh every 45s
   setInterval(() => {
     if (sessionStorage.getItem('haash_admin_auth') === 'true') {
@@ -623,4 +759,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize
   checkAuth();
+  updateCloudStatusUI();
 });

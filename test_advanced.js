@@ -10,7 +10,9 @@ const pages = [
   '/services/ai-chatbot.html',
   '/services/website-development.html',
   '/services/ui-ux-design.html',
-  '/services/ai-call-receptionist.html'
+  '/services/ai-call-receptionist.html',
+  '/services/crm-systems.html',
+  '/services/graphic-design.html'
 ];
 
 async function runTests() {
