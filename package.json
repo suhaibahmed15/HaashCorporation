@@ -3,23 +3,18 @@
   "version": "1.0.0",
   "description": "Haash Corporation — Intelligent Digital Solutions Corporate Website",
   "scripts": {
-    "build": "echo static",
     "start": "node dev-server.js",
-    "dev": "node dev-server.js",
-    "test": "node test_advanced.js"
+    "dev": "node dev-server.js"
   },
   "keywords": [
     "haash-corporation",
     "ai-solutions",
     "web-development",
     "ui-ux-design",
-    "ai-call-receptionist"
+    "ai-call-receptionist",
+    "crm-systems",
+    "graphic-design"
   ],
   "author": "Haash Corporation",
-  "license": "ISC",
-  "dependencies": {
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "pngjs": "^7.0.0"
-  }
+  "license": "ISC"
 }

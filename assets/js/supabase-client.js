@@ -14,8 +14,8 @@
   const DEFAULT_CONFIG = (window.HAASH_SUPABASE_CONFIG && typeof window.HAASH_SUPABASE_CONFIG === 'object')
     ? window.HAASH_SUPABASE_CONFIG
     : {
-        url: '',
-        anonKey: ''
+        url: 'https://pwtscnewdqzktowjvcee.supabase.co',
+        anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3dHNjbmV3ZHF6a3Rvd2p2Y2VlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzMDY0MTIsImV4cCI6MjEwNzg4MjQxMn0.IahJ9cjLtxekmuKox5izokzix7LDm56CRKP_0ngzd6I'
       };
 
   const getUrl = () => {
